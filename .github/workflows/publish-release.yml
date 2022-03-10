@@ -1,0 +1,34 @@
+name: Publish Release Artifacts
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'
+
+jobs:
+  release:
+      name: Publish Release
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v2
+          with:
+            fetch-depth: 0
+
+        # Get datetime
+        - name: Get datetime for release name
+          id: datetime
+          run: |
+            echo "::set-output name=datetime::$(date +'%Y%m%d%H%M')"
+        
+        # Upload artifacts
+        - name: Upload Release
+          uses: softprops/action-gh-release@v1
+          with:
+            name: Release ${{ steps.datetime.outputs.datetime }}
+            tag_name: Release/${{ steps.datetime.outputs.datetime }}
+            files: |
+              ./test.json
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
