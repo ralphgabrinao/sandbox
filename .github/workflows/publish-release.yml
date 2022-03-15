@@ -27,5 +27,6 @@ jobs:
             tag_name: Release/${{ steps.datetime.outputs.datetime }}
             files: |
               ./test.json
+              ./test.zip
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
